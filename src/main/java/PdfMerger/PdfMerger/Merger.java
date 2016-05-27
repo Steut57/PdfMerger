@@ -2,17 +2,21 @@ package PdfMerger.PdfMerger;
 
 import java.io.IOException;
 
+import javax.swing.DefaultListModel;
+
 import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.util.PDFMergerUtility;
 
 public class Merger 
 {
-	public Merger()
+	public Merger(String namePdf, DefaultListModel<String> listFiles)
 	{
 		PDFMergerUtility ut = new PDFMergerUtility();
-	    ut.addSource("./Resources/test1.pdf");
-	    ut.addSource("./Resources/test2.pdf");
-	    ut.setDestinationFileName("./Resources/test.pdf");
+		for(int i = 0; i < listFiles.size(); i++)
+		{
+			ut.addSource(listFiles.getElementAt(i));
+		}
+	    ut.setDestinationFileName(namePdf+".pdf");
 	    try {
 			ut.mergeDocuments();
 		} catch (COSVisitorException e) {
