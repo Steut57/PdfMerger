@@ -1,11 +1,8 @@
 package PdfMerger.PdfMerger;
 
-import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -17,6 +14,10 @@ import javax.swing.JScrollPane;
 
 public class Interface extends JFrame implements ActionListener
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JList<String> graphicListFiles;
 	private JButton buttonAddFile, buttonQuit, buttonCombine;
 	private JScrollPane listScroller;
@@ -30,7 +31,7 @@ public class Interface extends JFrame implements ActionListener
 		this.setSize(900, 600);
 		this.setLayout(null);
 		modelList = new DefaultListModel<String>();
-		graphicListFiles = new JList(modelList);
+		graphicListFiles = new JList<String>(modelList);
 		listScroller = new JScrollPane(graphicListFiles);
 		listScroller.setBounds(0, 0, 500, 500);
 		this.add(listScroller);
