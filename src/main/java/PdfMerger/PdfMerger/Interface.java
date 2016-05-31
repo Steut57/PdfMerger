@@ -2,9 +2,14 @@ package PdfMerger.PdfMerger;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -19,12 +24,12 @@ public class Interface extends JFrame implements ActionListener
 	 */
 	private static final long serialVersionUID = 1L;
 	private JList<String> graphicListFiles;
-	private JButton buttonAddFile, buttonQuit, buttonCombine;
+	private JButton buttonAddFile, buttonQuit, buttonCombine, buttonUp, buttonDown, buttonDel;
 	private JScrollPane listScroller;
 	private DefaultListModel<String> modelList;
 	private JFileChooser pathToSave;
 	final JFileChooser fc = new JFileChooser();
-	public Interface() 
+	public Interface() throws IOException 
 	{
 		super("PdfMerger");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,9 +49,33 @@ public class Interface extends JFrame implements ActionListener
 		buttonQuit = new JButton("Quitter l'application");
 		buttonQuit.setBounds(600, 500, 200, 40);
 		buttonQuit.addActionListener(this);
+		BufferedImage iconButtonUp = ImageIO.read(new File("./Resources/arrowUp.png"));
+		buttonUp = new JButton(new ImageIcon(iconButtonUp));
+		buttonUp.setBorder(BorderFactory.createEmptyBorder());
+		buttonUp.setContentAreaFilled(false);
+		buttonUp.setFocusPainted(false);
+		buttonUp.setBounds(510, 200, 50, 30);
+		buttonUp.addActionListener(this);
+		BufferedImage iconButtonDel = ImageIO.read(new File("./Resources/buttonDel.png"));
+		buttonDel = new JButton(new ImageIcon(iconButtonDel));
+		buttonDel.setBorder(BorderFactory.createEmptyBorder());
+		buttonDel.setContentAreaFilled(false);
+		buttonDel.setFocusPainted(false);
+		buttonDel.setBounds(510, 250, 50, 30);
+		buttonDel.addActionListener(this);
+		BufferedImage iconButtonDown = ImageIO.read(new File("./Resources/arrowDown.png"));
+		buttonDown = new JButton(new ImageIcon(iconButtonDown));
+		buttonDown.setBorder(BorderFactory.createEmptyBorder());
+		buttonDown.setContentAreaFilled(false);
+		buttonDown.setFocusPainted(false);
+		buttonDown.setBounds(510, 300, 50, 30);
+		buttonDown.addActionListener(this);
 		this.add(buttonAddFile);
 		this.add(buttonCombine);
 		this.add(buttonQuit);
+		this.add(buttonUp);
+		this.add(buttonDel);
+		this.add(buttonDown);
 		this.setVisible(true);
 	}
 	
@@ -91,7 +120,42 @@ public class Interface extends JFrame implements ActionListener
 		{
 			System.exit(0);
 		}
-		
+		else if(source == buttonUp)
+		{
+			int selectedPosition = graphicListFiles.getSelectedIndex();
+			if(selectedPosition == 0 || selectedPosition == -1)
+			{
+				return;
+			}
+			String tmp = modelList.getElementAt(selectedPosition);
+			modelList.remove(selectedPosition);
+			modelList.add(selectedPosition - 1, tmp);
+			refreshListFiles();
+			graphicListFiles.setSelectedIndex(selectedPosition - 1);
+		}
+		else if(source == buttonDel)
+		{
+			int selectedPosition = graphicListFiles.getSelectedIndex();
+			if(selectedPosition == -1)
+			{
+				return;
+			}
+			modelList.remove(selectedPosition);
+			refreshListFiles();
+		}
+		else if(source == buttonDown)
+		{
+			int selectedPosition = graphicListFiles.getSelectedIndex();
+			if(selectedPosition == modelList.size() - 1 || selectedPosition == -1)
+			{
+				return;
+			}
+			String tmp = modelList.getElementAt(selectedPosition);
+			modelList.remove(selectedPosition);
+			modelList.add(selectedPosition + 1, tmp);
+			refreshListFiles();
+			graphicListFiles.setSelectedIndex(selectedPosition + 1);
+		}		
 	}
 
 	private void refreshListFiles() 
