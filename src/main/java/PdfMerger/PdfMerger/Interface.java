@@ -83,13 +83,16 @@ public class Interface extends JFrame implements ActionListener
 		Object source = e.getSource();
 		if(source == buttonAddFile)
 		{
+			fc.setMultiSelectionEnabled(true);
 			int returnVal = fc.showOpenDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) 
 			{
-				File file = fc.getSelectedFile();
-				modelList.addElement(file.getAbsolutePath());
-				refreshListFiles();
-				System.out.println("file " + file.getAbsolutePath());				
+				File[] files = fc.getSelectedFiles();
+				for(int i = 0; i < files.length; i++)
+				{
+					modelList.addElement(files[i].getAbsolutePath());
+				}
+				refreshListFiles();				
 			} 
 			else 
 			{
