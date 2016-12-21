@@ -24,7 +24,7 @@ public class Interface extends JFrame implements ActionListener
 	 */
 	private static final long serialVersionUID = 1L;
 	private JList<String> graphicListFiles;
-	private JButton buttonAddFile, buttonQuit, buttonCombine, buttonUp, buttonDown, buttonDel;
+	private JButton buttonAddFile, buttonQuit, buttonCombine, buttonUp, buttonDown, buttonDel, buttonPreview;
 	private JScrollPane listScroller;
 	private DefaultListModel<String> modelList;
 	private JFileChooser pathToSave;
@@ -55,6 +55,7 @@ public class Interface extends JFrame implements ActionListener
 		buttonUp.setContentAreaFilled(false);
 		buttonUp.setFocusPainted(false);
 		buttonUp.setBounds(510, 200, 50, 30);
+		buttonUp.setToolTipText("Remonter le fichier");
 		buttonUp.addActionListener(this);
 		BufferedImage iconButtonDel = ImageIO.read(new File("./Resources/buttonDel.png"));
 		buttonDel = new JButton(new ImageIcon(iconButtonDel));
@@ -62,6 +63,7 @@ public class Interface extends JFrame implements ActionListener
 		buttonDel.setContentAreaFilled(false);
 		buttonDel.setFocusPainted(false);
 		buttonDel.setBounds(510, 250, 50, 30);
+		buttonDel.setToolTipText("Enlever ce fichier de la combinaison");
 		buttonDel.addActionListener(this);
 		BufferedImage iconButtonDown = ImageIO.read(new File("./Resources/arrowDown.png"));
 		buttonDown = new JButton(new ImageIcon(iconButtonDown));
@@ -69,13 +71,18 @@ public class Interface extends JFrame implements ActionListener
 		buttonDown.setContentAreaFilled(false);
 		buttonDown.setFocusPainted(false);
 		buttonDown.setBounds(510, 300, 50, 30);
+		buttonDown.setToolTipText("Descendre le fichier");
 		buttonDown.addActionListener(this);
+		buttonPreview = new JButton("Visualiser ce fichier");
+		buttonPreview.setBounds(600, 300, 200, 40);
+		buttonPreview.addActionListener(this);
 		this.add(buttonAddFile);
 		this.add(buttonCombine);
 		this.add(buttonQuit);
 		this.add(buttonUp);
 		this.add(buttonDel);
 		this.add(buttonDown);
+		this.add(buttonPreview);
 		this.setVisible(true);
 	}
 	
@@ -158,7 +165,22 @@ public class Interface extends JFrame implements ActionListener
 			modelList.add(selectedPosition + 1, tmp);
 			refreshListFiles();
 			graphicListFiles.setSelectedIndex(selectedPosition + 1);
-		}		
+		}	
+		else if(source == buttonPreview)
+		{
+			System.out.println("Preview selected");
+			int selectedPosition = graphicListFiles.getSelectedIndex();
+			String tmp = modelList.getElementAt(selectedPosition);
+			System.out.println("Pdf visualisation file : " + tmp);
+			try 
+			{
+				new PdfVisualisation(tmp);
+			} catch (IOException e1) 
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 	}
 
 	private void refreshListFiles() 
